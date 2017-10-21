@@ -77,13 +77,7 @@ $(document).ready(function() {
   $('#send').on('submit', $('.submit'), function() {
     app.handleSubmit();
   });
-  var filterByRoom = function() {
-    let room = document.getElementById('chatrooms').value;
-    console.log(room);
-    let msgClass = '.' + room;
-    let filteredMsg = $(msgClass);
-    console.log(filteredMsg);
-  };
+ 
 });
 
 
