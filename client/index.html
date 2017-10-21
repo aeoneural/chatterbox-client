@@ -21,13 +21,6 @@
       }
     </script>
     <script>
-      var filterByRoom = function() {
-        let room = document.getElementById('chatrooms').value;
-        // console.log(room);
-        let msgClass = '.' + room;
-        let filteredMsg = $(msgClass);
-        console.log(filteredMsg);
-      };
     </script>
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
@@ -38,6 +31,10 @@
         <select id='chatrooms' onchange="filterByRoom();">
           <option value="addNewRoom">Add New Room</option>
         </select>
+      <form id='send' method='post'>
+        <input type="text" name="message" id="message"> 
+        <input type="submit" name="submit" class="submit">
+      </form>
       <!-- Your HTML goes here! -->
     </div>
     <div id="chats"></div>
