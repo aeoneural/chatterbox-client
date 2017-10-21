@@ -4,9 +4,11 @@ var removeSpecialChars = function (str) {
     .replace(/\s+/g, ' ')
     .replace(/^(\s*)([\W\w]*)(\b\s*$)/g, '$2');
 };
+
+
 var app = {};
 app.room = [];
-app.server = 'http://parse.sfm8.hackreactor.com/';
+app.server = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages';
 app.init = function() { 
 };
 
@@ -14,14 +16,16 @@ app.send = function(message) {
   
   $.ajax({
   // This is the url you should use to communicate with the parse API server.
-    url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+    url: app.server,
     type: 'POST',
-    data: JSON.stringify(message),
-    contentType: 'application/json',
+    data: message,
+    dataType: 'json',
+    // contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message sent');
     },
     error: function (data) {
+      
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to send message', data);
     }
@@ -38,7 +42,7 @@ app.fetch = function(room) {
     };
     $.ajax({
     // This is the url you should use to communicate with the parse API server.
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: app.server,
       type: 'GET',
       data: data,
       success: function (data) {
@@ -48,7 +52,7 @@ app.fetch = function(room) {
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        console.error('chatterbox: Failed to send message', data);
+        console.error('chatterbox: Failed to receive message', data);
       }
     });
   } else {
@@ -61,7 +65,7 @@ app.fetch = function(room) {
     };
     $.ajax({
     // This is the url you should use to communicate with the parse API server.
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: app.server,
       type: 'GET',
       data: data,
       success: function (data) {
@@ -71,7 +75,7 @@ app.fetch = function(room) {
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        console.error('chatterbox: Failed to send message', data);
+        console.error('chatterbox: Failed to receive message', data);
       }
     });
   }
@@ -81,7 +85,7 @@ app.clearMessages = function() {
 };
 
 app.renderMessage = function(message) {
-  if (message.text.includes('script')) {
+  if (message.text === undefined || message.text.includes('script')) {
     return;
   }
   if (!app.room.includes(message.roomname)) {
@@ -103,7 +107,6 @@ app.renderRoom = function(room) {
 app.handleUsernameClick = function(username) { 
   username = username.split(' ').join('');
   username = removeSpecialChars(username);
-  console.log(username);
   $('.' + username).css({'font-weight': 'bold'});
 };
 
@@ -141,7 +144,9 @@ $(document).ready(function() {
     app.handleSubmit();
     event.preventDefault();
   });
-  
+  $('.clearMsg').on('click', function() {
+    app.clearMessages();
+  });
 });
 
 
